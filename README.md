@@ -87,3 +87,9 @@ API_CONTRACT.md       Source-derived REST contract
 - A browser refresh restores the active game state during the same tab session, but earlier combat-log text cannot be restored because the API does not expose history.
 - There is no database, authentication, or multiplayer support.
 - The CLI and REST progression coexist; the React frontend communicates only with the REST API.
+
+## Screenshots
+<img width="2521" height="1254" alt="Screenshot 2026-07-23 111028" src="https://github.com/user-attachments/assets/e0555c6e-2823-42bf-836b-44e9848f80e8" />
+<img width="2509" height="1244" alt="Screenshot 2026-07-23 111105" src="https://github.com/user-attachments/assets/442a228a-4045-4df4-a7ad-44f85824eb4d" />
+
+
