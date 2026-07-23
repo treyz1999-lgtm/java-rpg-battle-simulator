@@ -1,4 +1,4 @@
-# Realm of Java
+# RPG JAVA
 
 A modular turn-based RPG built in Java to practice object-oriented programming, inheritance, polymorphism, enums, records, and separation of concerns.
 
