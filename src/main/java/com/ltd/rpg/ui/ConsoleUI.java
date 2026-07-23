@@ -1,5 +1,7 @@
 package com.ltd.rpg.ui;
 
+import com.ltd.rpg.combat.ActionResult;
+
 import java.util.Scanner;
 
 import java.util.Scanner;
@@ -66,6 +68,48 @@ public class ConsoleUI {
             catch (NumberFormatException exception) {
                 System.out.println("Please enter a valid number.");
             }
+        }
+    }
+
+    public void displayActionResult(ActionResult result) {
+        if (!result.successful()) {
+            System.out.println(
+                    result.actorName()
+                            + " could not use "
+                            + result.actionName()
+                            + "."
+            );
+
+            return;
+        }
+
+        if (result.damageDealt() > 0) {
+            String criticalMessage = result.criticalHit()
+                    ? " Critical hit!"
+                    : "";
+
+            System.out.println(
+                    result.actorName()
+                            + " used "
+                            + result.actionName()
+                            + " on "
+                            + result.targetName()
+                            + " for "
+                            + result.damageDealt()
+                            + " damage."
+                            + criticalMessage
+            );
+        }
+
+        if (result.healingDone() > 0) {
+            System.out.println(
+                    result.actorName()
+                            + " used "
+                            + result.actionName()
+                            + " and restored "
+                            + result.healingDone()
+                            + " health."
+            );
         }
     }
 

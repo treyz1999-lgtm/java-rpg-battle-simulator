@@ -1,5 +1,7 @@
 package com.ltd.rpg.character;
 
+import com.ltd.rpg.combat.ActionResult;
+
 public class Warrior extends Player {
 
     public Warrior(String name) {
@@ -7,7 +9,19 @@ public class Warrior extends Player {
     }
 
     @Override
-    public int useSpecialAbility(Enemy enemy) {
-        return enemy.takeDamage(getAttackPower() * 2);
+    public ActionResult useSpecialAbility(Enemy enemy) {
+        int damage = enemy.takeDamage(
+                getAttackPower() * 2
+        );
+
+        return new ActionResult(
+                getName(),
+                "Power Strike",
+                enemy.getName(),
+                damage,
+                0,
+                false,
+                true
+        );
     }
 }

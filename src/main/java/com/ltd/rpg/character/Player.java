@@ -1,5 +1,7 @@
 package com.ltd.rpg.character;
 
+import com.ltd.rpg.combat.ActionResult;
+
 public abstract class Player extends Combatant {
 
     private static final int POTION_HEAL_AMOUNT = 30;
@@ -16,20 +18,46 @@ public abstract class Player extends Combatant {
         this.potionCount = 3;
     }
 
-    public abstract int useSpecialAbility(Enemy enemy);
+    public abstract ActionResult useSpecialAbility(Enemy enemy);
 
-    public int usePotion() {
+    public ActionResult usePotion() {
         if (potionCount <= 0) {
-            return 0;
+            return new ActionResult(
+                    getName(),
+                    "Health Potion",
+                    getName(),
+                    0,
+                    0,
+                    false,
+                    false
+            );
         }
 
         int amountHealed = heal(POTION_HEAL_AMOUNT);
 
-        if (amountHealed > 0) {
-            potionCount--;
+        if (amountHealed <= 0) {
+            return new ActionResult(
+                    getName(),
+                    "Health Potion",
+                    getName(),
+                    0,
+                    0,
+                    false,
+                    false
+            );
         }
 
-        return amountHealed;
+        potionCount--;
+
+        return new ActionResult(
+                getName(),
+                "Health Potion",
+                getName(),
+                0,
+                amountHealed,
+                false,
+                true
+        );
     }
 
     public int getPotionCount() {

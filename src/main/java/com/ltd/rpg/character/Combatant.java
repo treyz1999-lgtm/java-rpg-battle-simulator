@@ -1,5 +1,7 @@
 package com.ltd.rpg.character;
 
+import com.ltd.rpg.combat.ActionResult;
+
 public abstract class Combatant {
 
     private String name;
@@ -23,6 +25,20 @@ public abstract class Combatant {
 
     public int attack(Combatant target) {
         return target.takeDamage(attackPower);
+    }
+
+    public ActionResult performBasicAttack(Combatant target) {
+        int damage = attack(target);
+
+        return new ActionResult(
+                getName(),
+                "Basic Attack",
+                target.getName(),
+                damage,
+                0,
+                false,
+                true
+        );
     }
 
     public int takeDamage(int incomingDamage) {

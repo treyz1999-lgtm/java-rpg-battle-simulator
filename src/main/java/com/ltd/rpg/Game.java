@@ -1,6 +1,7 @@
 package com.ltd.rpg;
 
 import com.ltd.rpg.character.*;
+import com.ltd.rpg.combat.ActionResult;
 import com.ltd.rpg.ui.ConsoleUI;
 
 import com.ltd.rpg.character.Enemy;
@@ -87,62 +88,27 @@ public class Game {
     }
 
     private void processPlayerAction(int action, Enemy enemy) {
+        ActionResult result;
+
         switch (action) {
-            case 1 -> {
-                int damage = player.attack(enemy);
+            case 1 -> result = player.performBasicAttack(enemy);
 
-                ui.displayMessage(
-                        player.getName()
-                                + " dealt "
-                                + damage
-                                + " damage."
-                );
-            }
+            case 2 -> result = player.useSpecialAbility(enemy);
 
-            case 2 -> {
-                int damage = player.useSpecialAbility(enemy);
-
-                ui.displayMessage(
-                        player.getName()
-                                + " used a special ability for "
-                                + damage
-                                + " damage."
-                );
-            }
-
-            case 3 -> {
-                int amountHealed = player.usePotion();
-
-                if (amountHealed > 0) {
-                    ui.displayMessage(
-                            player.getName()
-                                    + " restored "
-                                    + amountHealed
-                                    + " health."
-                    );
-                }
-                else {
-                    ui.displayMessage(
-                            "You could not use a potion."
-                    );
-                }
-            }
+            case 3 -> result = player.usePotion();
 
             default -> throw new IllegalArgumentException(
                     "Unknown battle action: " + action
             );
         }
+
+        ui.displayActionResult(result);
     }
 
     private void processEnemyTurn(Enemy enemy) {
-        int damage = enemy.attack(player);
+        ActionResult result = enemy.performBasicAttack(player);
 
-        ui.displayMessage(
-                enemy.getName()
-                        + " dealt "
-                        + damage
-                        + " damage."
-        );
+        ui.displayActionResult(result);
     }
 
     private void displayBattleStatus(Enemy enemy) {
