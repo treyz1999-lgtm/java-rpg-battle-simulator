@@ -12,7 +12,16 @@ import com.ltd.rpg.character.Player;
 import com.ltd.rpg.character.Rogue;
 import com.ltd.rpg.character.Warrior;
 
-
+/**
+ * Controls the overall flow of the game.
+ *
+ * <p>The Game class creates the selected player, manages enemy
+ * progression, starts battles, provides rewards, and determines
+ * the final outcome.</p>
+ *
+ * <p>Individual combat rules are delegated to BattleService,
+ * while input and output are delegated to ConsoleUI.</p>
+ */
 public class Game {
 
     private final ConsoleUI ui;
@@ -24,6 +33,13 @@ public class Game {
         this.battleService = new BattleService();
     }
 
+    /**
+     * Starts a new game session.
+     *
+     * <p>The player enters a name, selects a character class,
+     * fights a sequence of enemies, and receives rewards between
+     * successful battles.</p>
+     */
     public void start() {
         ui.displayMessage("================================");
         ui.displayMessage("          RPG GAME");
@@ -90,6 +106,14 @@ public class Game {
         ui.close();
     }
 
+    /**
+     * Creates the selected player subclass.
+     *
+     * @param selection numeric character selection from the UI
+     * @param name name assigned to the player
+     * @return a Warrior, Mage, or Rogue stored as a Player
+     * @throws IllegalArgumentException if the selection is not recognized
+     */
     private Player createPlayer(int selection, String name) {
         return switch (selection) {
             case 1 -> new Warrior(name);
@@ -101,6 +125,11 @@ public class Game {
         };
     }
 
+    /**
+     * Runs a complete battle between the current player and an enemy.
+     *
+     * @param enemy enemy participating in the battle
+     */
     private void runBattle(Enemy enemy) {
         ui.displayMessage("");
         ui.displayMessage("A " + enemy.getName() + " appears!");
@@ -174,6 +203,9 @@ public class Game {
         ui.displayMessage("--------------------------------");
     }
 
+    /**
+     * Gives the player a choice of reward after winning a battle.
+     */
     private void giveReward() {
         int rewardChoice = ui.chooseReward();
 

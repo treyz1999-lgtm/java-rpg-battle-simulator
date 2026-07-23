@@ -8,6 +8,15 @@ public abstract class Player extends Combatant {
 
     private int potionCount;
 
+    /**
+     * Abstract base class for all playable character classes.
+     *
+     * <p>Player extends Combatant with player-specific behavior,
+     * including potion management and a required special ability.</p>
+     *
+     * <p>Concrete subclasses must implement their own version of
+     * useSpecialAbility.</p>
+     */
     public Player(
             String name,
             int maxHealth,
@@ -18,8 +27,21 @@ public abstract class Player extends Combatant {
         this.potionCount = 3;
     }
 
+    /**
+     * Performs the class-specific special ability.
+     *
+     * @param enemy enemy targeted by the ability
+     * @return structured result describing the action
+     */
     public abstract ActionResult useSpecialAbility(Enemy enemy);
 
+    /**
+     * Uses one health potion when available and when healing is possible.
+     *
+     * <p>A potion is only consumed when it successfully restores health.</p>
+     *
+     * @return result describing the healing action or its failure
+     */
     public ActionResult usePotion() {
         if (potionCount <= 0) {
             return new ActionResult(
@@ -64,6 +86,9 @@ public abstract class Player extends Combatant {
         return potionCount;
     }
 
+    /**
+     * Adds one potion to the player's inventory.
+     */
     public void addPotion() {
         potionCount++;
     }

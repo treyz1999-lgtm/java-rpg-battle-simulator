@@ -5,8 +5,15 @@ import com.ltd.rpg.combat.ActionType;
 
 import java.util.Scanner;
 
-import java.util.Scanner;
-
+/**
+ * Command-line user interface for the game.
+ *
+ * <p>This class owns the Scanner used for keyboard input, displays
+ * menus and combat information, validates user choices, and formats
+ * action results.</p>
+ *
+ * <p>No combat calculations should be implemented in this class.</p>
+ */
 public class ConsoleUI {
 
     private final Scanner keyboard;
@@ -15,11 +22,21 @@ public class ConsoleUI {
         this.keyboard = new Scanner(System.in);
     }
 
+    /**
+     * Prompts the player to enter a character name.
+     *
+     * @return trimmed character name
+     */
     public String askForName() {
         System.out.print("Enter your character's name: ");
         return keyboard.nextLine().trim();
     }
 
+    /**
+     * Displays the character-selection menu.
+     *
+     * @return validated numeric selection
+     */
     public int chooseCharacter() {
         System.out.println();
         System.out.println("Choose your class");
@@ -31,6 +48,11 @@ public class ConsoleUI {
         return readChoice(1, 3);
     }
 
+    /**
+     * Displays available battle actions.
+     *
+     * @return selected ActionType
+     */
     public ActionType chooseBattleAction() {
         System.out.println();
         System.out.println("Choose an action");
@@ -56,6 +78,13 @@ public class ConsoleUI {
         System.out.println(message);
     }
 
+    /**
+     * Reads and validates an integer within the supplied range.
+     *
+     * @param minimum smallest accepted value
+     * @param maximum largest accepted value
+     * @return validated integer choice
+     */
     private int readChoice(int minimum, int maximum) {
         while (true) {
             System.out.print("> ");
@@ -82,6 +111,11 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Displays the result of a completed combat action.
+     *
+     * @param result structured action result to display
+     */
     public void displayActionResult(ActionResult result) {
         if (!result.successful()) {
             System.out.println(
@@ -124,6 +158,9 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Closes the keyboard input resource.
+     */
     public void close() {
         keyboard.close();
     }
