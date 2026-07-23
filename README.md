@@ -27,10 +27,11 @@ The Java backend remains the source of truth for damage, healing, critical hits,
 From the repository root:
 
 ```powershell
-mvn spring-boot:run
+$env:JAVA_HOME="$env:USERPROFILE\.jdks\openjdk-26.0.1"
+.\mvnw.cmd spring-boot:run
 ```
 
-You can also run `com.ltd.rpg.Main` from IntelliJ IDEA. The backend uses `http://localhost:8080` by default.
+The Maven Wrapper downloads the pinned Maven version automatically, so a global Maven installation is not required. Adjust `JAVA_HOME` if your JDK is installed elsewhere. You can also run `com.ltd.rpg.Main` from IntelliJ IDEA. The backend uses `http://localhost:8080` by default.
 
 ## Run the frontend
 
