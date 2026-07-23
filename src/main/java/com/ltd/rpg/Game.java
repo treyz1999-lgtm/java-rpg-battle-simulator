@@ -2,6 +2,8 @@ package com.ltd.rpg;
 
 import com.ltd.rpg.character.*;
 import com.ltd.rpg.combat.ActionResult;
+import com.ltd.rpg.combat.ActionType;
+import com.ltd.rpg.combat.BattleService;
 import com.ltd.rpg.ui.ConsoleUI;
 
 import com.ltd.rpg.character.Enemy;
@@ -15,9 +17,11 @@ public class Game {
 
     private final ConsoleUI ui;
     private Player player;
+    private final BattleService battleService;
 
     public Game() {
         this.ui = new ConsoleUI();
+        this.battleService = new BattleService();
     }
 
     public void start() {
@@ -46,6 +50,43 @@ public class Game {
 
         runBattle(goblin);
 
+        if (!player.isAlive()) {
+            ui.close();
+            return;
+        }
+        giveReward();
+
+        Enemy skeleton = new Enemy(
+                "Skeleton",
+                65,
+                13,
+                4
+        );
+
+        runBattle(skeleton);
+
+        if (!player.isAlive()) {
+            ui.close();
+            return;
+        }
+        giveReward();
+
+        Enemy dragon = new Enemy(
+                "Dragon",
+                200,
+                20,
+                7
+        );
+
+        runBattle(dragon);
+
+        if (player.isAlive()) {
+            ui.displayMessage("");
+            ui.displayMessage(
+                    "You defeated the Dragon and completed the game!"
+            );
+        }
+
         ui.close();
     }
 
@@ -64,52 +105,47 @@ public class Game {
         ui.displayMessage("");
         ui.displayMessage("A " + enemy.getName() + " appears!");
 
-        while (player.isAlive() && enemy.isAlive()) {
+        while (!battleService.isBattleOver(player, enemy)) {
             displayBattleStatus(enemy);
 
-            int action = ui.chooseBattleAction();
-            processPlayerAction(action, enemy);
+            ActionType action = ui.chooseBattleAction();
+
+            ActionResult playerResult =
+                    battleService.processPlayerAction(
+                            player,
+                            enemy,
+                            action
+                    );
+
+            ui.displayActionResult(playerResult);
 
             if (enemy.isAlive()) {
-                processEnemyTurn(enemy);
+                ActionResult enemyResult =
+                        battleService.processEnemyTurn(
+                                enemy,
+                                player
+                        );
+
+                ui.displayActionResult(enemyResult);
             }
         }
 
+        displayBattleOutcome(enemy);
+    }
+
+    private void displayBattleOutcome(Enemy enemy) {
+        ui.displayMessage("");
+
         if (player.isAlive()) {
-            ui.displayMessage("");
             ui.displayMessage(
                     "You defeated the " + enemy.getName() + "!"
             );
         }
         else {
-            ui.displayMessage("");
             ui.displayMessage("You were defeated.");
         }
     }
 
-    private void processPlayerAction(int action, Enemy enemy) {
-        ActionResult result;
-
-        switch (action) {
-            case 1 -> result = player.performBasicAttack(enemy);
-
-            case 2 -> result = player.useSpecialAbility(enemy);
-
-            case 3 -> result = player.usePotion();
-
-            default -> throw new IllegalArgumentException(
-                    "Unknown battle action: " + action
-            );
-        }
-
-        ui.displayActionResult(result);
-    }
-
-    private void processEnemyTurn(Enemy enemy) {
-        ActionResult result = enemy.performBasicAttack(player);
-
-        ui.displayActionResult(result);
-    }
 
     private void displayBattleStatus(Enemy enemy) {
         ui.displayMessage("");
@@ -137,4 +173,35 @@ public class Game {
         );
         ui.displayMessage("--------------------------------");
     }
+
+    private void giveReward() {
+        int rewardChoice = ui.chooseReward();
+
+        switch (rewardChoice) {
+            case 1 -> {
+                int amountHealed = player.heal(40);
+
+                ui.displayMessage(
+                        player.getName()
+                                + " restored "
+                                + amountHealed
+                                + " health."
+                );
+            }
+
+            case 2 -> {
+                player.addPotion();
+
+                ui.displayMessage(
+                        player.getName()
+                                + " received one potion."
+                );
+            }
+
+            default -> throw new IllegalStateException(
+                    "Unexpected reward choice: " + rewardChoice
+            );
+        }
+    }
+
 }

@@ -63,4 +63,8 @@ public abstract class Player extends Combatant {
     public int getPotionCount() {
         return potionCount;
     }
+
+    public void addPotion() {
+        potionCount++;
+    }
 }

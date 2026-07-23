@@ -1,6 +1,7 @@
 package com.ltd.rpg.ui;
 
 import com.ltd.rpg.combat.ActionResult;
+import com.ltd.rpg.combat.ActionType;
 
 import java.util.Scanner;
 
@@ -30,7 +31,7 @@ public class ConsoleUI {
         return readChoice(1, 3);
     }
 
-    public int chooseBattleAction() {
+    public ActionType chooseBattleAction() {
         System.out.println();
         System.out.println("Choose an action");
         System.out.println("----------------");
@@ -38,7 +39,17 @@ public class ConsoleUI {
         System.out.println("2. Special Ability");
         System.out.println("3. Use Potion");
 
-        return readChoice(1, 3);
+        int choice = readChoice(1, 3);
+
+        return switch (choice) {
+            case 1 -> ActionType.BASIC_ATTACK;
+            case 2 -> ActionType.SPECIAL_ABILITY;
+            case 3 -> ActionType.USE_POTION;
+
+            default -> throw new IllegalStateException(
+                    "Unexpected action choice: " + choice
+            );
+        };
     }
 
     public void displayMessage(String message) {
@@ -115,5 +126,15 @@ public class ConsoleUI {
 
     public void close() {
         keyboard.close();
+    }
+
+    public int chooseReward() {
+        System.out.println();
+        System.out.println("Choose a reward");
+        System.out.println("---------------");
+        System.out.println("1. Restore 40 health");
+        System.out.println("2. Gain one potion");
+
+        return readChoice(1, 2);
     }
 }
