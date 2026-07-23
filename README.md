@@ -1,49 +1,88 @@
-# RPG JAVA
+# Realm of Java
 
-A modular turn-based RPG built in Java to practice object-oriented programming, inheritance, polymorphism, enums, records, and separation of concerns.
+Realm of Java is a short turn-based RPG with a Spring Boot REST API, an existing Java CLI/domain layer, and a responsive React frontend. Choose a Warrior, Mage, or Rogue and fight the Goblin, Skeleton, and Dragon without duplicating combat rules in the browser.
 
-The game currently runs in the command line and is structured so the core game logic can later be adapted into a Spring Boot REST API with a React frontend.
+## V2 features
 
-## Features
+- React and Vite browser interface
+- Character creation and class selection
+- API-driven player and enemy statistics
+- Basic attacks, class abilities, and health potions
+- Structured combat log based on backend `ActionResult` records
+- Reward selection between encounters
+- Victory, defeat, and replay flows
+- Session refresh recovery using the game ID
+- Responsive, keyboard-accessible layout with reduced-motion support
 
-- Choose between Warrior, Mage, and Rogue classes
-- Unique special ability for each player class
-- Turn-based combat
-- Basic attacks and defensive stats
-- Health potions
-- Input validation
-- Multiple enemies and a final boss
-- Reward choices between battles
-- Structured combat results using Java records
-- Modular architecture designed for future API integration
+The Java backend remains the source of truth for damage, healing, critical hits, enemy progression, rewards, and completion state. The frontend sends commands and renders API responses only.
 
-## Character Classes
+## Requirements
 
-### Warrior
+- JDK 21 or newer
+- Maven 3.9+ (or IntelliJ IDEA bundled Maven)
+- Node.js 20+ and npm
 
-- Highest health
-- Highest defense
-- Uses Power Strike for increased damage
+## Run the backend
 
-### Mage
+From the repository root:
 
-- Lower health and defense
-- Highest base attack
-- Uses Fireball for additional damage
+```powershell
+mvn spring-boot:run
+```
 
-### Rogue
+You can also run `com.ltd.rpg.Main` from IntelliJ IDEA. The backend uses `http://localhost:8080` by default.
 
-- Balanced stats
-- Uses Shadow Strike
-- Has a chance to land a critical hit
+## Run the frontend
 
-## Game Flow
+In a second terminal:
 
-The player selects a class and fights through a short sequence of enemies:
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Vite proxies relative `/api` requests to port 8080.
+
+To make direct browser requests instead, copy `frontend/.env.example` to `frontend/.env` and set:
+
+```dotenv
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+The backend permits the local Vite origin `http://localhost:5173` for `GET` and `POST` requests under `/api/**`.
+
+## Architecture
 
 ```text
-Goblin
-   ↓
-Skeleton
-   ↓
-Dragon
+React components
+      |
+frontend/src/api/gameApi.js
+      |
+Spring Boot /api/games REST controller
+      |
+GameService -> BattleService -> Java domain classes
+```
+
+The verified endpoint and JSON contract is documented in [API_CONTRACT.md](API_CONTRACT.md).
+
+## Project layout
+
+```text
+src/main/java/       Spring Boot API, CLI, and game domain
+frontend/src/        React application and API client
+frontend/vite.config.js
+API_CONTRACT.md       Source-derived REST contract
+```
+
+## Development ports
+
+- Spring Boot API: `8080`
+- Vite frontend: `5173`
+
+## Current limitations
+
+- Game sessions live only in backend memory and disappear when the backend restarts.
+- A browser refresh restores the active game state during the same tab session, but earlier combat-log text cannot be restored because the API does not expose history.
+- There is no database, authentication, or multiplayer support.
+- The CLI and REST progression coexist; the React frontend communicates only with the REST API.
