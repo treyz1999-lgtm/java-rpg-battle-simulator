@@ -2,6 +2,7 @@ package com.ltd.rpg.combat;
 
 import com.ltd.rpg.character.Enemy;
 import com.ltd.rpg.character.Player;
+import org.springframework.stereotype.Service;
 
 /**
  * Coordinates turn-based combat operations.
@@ -12,6 +13,8 @@ import com.ltd.rpg.character.Player;
  * <p>The service contains combat coordination logic but does not
  * handle keyboard input or presentation.</p>
  */
+
+@Service
 public class BattleService {
 
     /**

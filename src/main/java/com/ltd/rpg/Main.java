@@ -1,20 +1,15 @@
 package com.ltd.rpg;
 
-/**
- * Entry point for the Realm of Java application.
- *
- * <p>This class creates a game instance and begins the game.
- * Application logic is intentionally kept outside the main method.</p>
- */
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Entry point for the Spring Boot version of Realm of Java.
+ */
+@SpringBootApplication
 public class Main {
-    /**
-     * Starts the application.
-     *
-     * @param args command-line arguments passed to the program
-     */
+
     public static void main(String[] args) {
-        Game game = new Game();
-        game.start();
+        SpringApplication.run(Main.class, args);
     }
 }
